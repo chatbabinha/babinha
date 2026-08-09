@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Babinha</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    margin:0;
+    background:#0b1220;
+    color:white;
+}
+
+header{
+    background:#111c31;
+    padding:20px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    color:#20d66b;
+}
+
+.container{
+    width:90%;
+    max-width:600px;
+    margin:30px auto;
+}
+
+.tela{
+    display:none;
+}
+
+.tela.ativa{
+    display:block;
+}
+
+.card{
+    background:#151f33;
+    padding:25px;
+    border-radius:15px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:12px;
+    border:0;
+    border-radius:10px;
+    background:#20d66b;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.secundario{
+    background:#293750;
+    color:white;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin-top:8px;
+    margin-bottom:15px;
+    border:0;
+    border-radius:8px;
+    background:#293750;
+    color:white;
+}
+
+.babinha{
+    background:#202c43;
+    padding:18px;
+    border-radius:12px;
+    margin-top:15px;
+}
+
+.babinha h3{
+    color:#20d66b;
+}
+
+.info{
+    background:#0d1728;
+    padding:12px;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+.jogador{
+    background:#293750;
+    padding:10px;
+    margin-top:8px;
+    border-radius:8px;
+}
+
+.vazio{
+    text-align:center;
+    padding:20px;
+    color:#9ca3af;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>⚽ Babinha</h1>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- INÍCIO -->
+
+<div id="inicio" class="tela ativa">
+
+<div class="card">
+
+<h2>Bem-vindo ao Babinha!</h2>
+
+<p>Organize sua partida de futebol.</p>
+
+<button onclick="mostrar('login')">
+⚽ Entrar no Babinha
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- LOGIN -->
+
+<div id="login" class="tela">
+
+<div class="card">
+
+<h2>Entrar</h2>
+
+<p>Digite seu nome:</p>
+
+<input
+id="nome"
+type="text"
+placeholder="Seu nome"
+>
+
+<button onclick="entrar()">
+Continuar
+</button>
+
+<button
+class="secundario"
+onclick="mostrar('inicio')">
+
+Voltar
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- MENU -->
+
+<div id="menu" class="tela">
+
+<div class="card">
+
+<h2>
+Olá, <span id="nomeMostrar"></span> 👋
+</h2>
+
+<p>Escolha uma opção:</p>
+
+
+<button
+id="criarBotao"
+onclick="mostrar('criar')">
+
+➕ CRIAR BABINHA
+
+</button>
+
+
+<!-- ESTE É O BOTÃO QUE VOCÊ ESTÁ APERTANDO -->
+
+<button
+onclick="abrirEscolher()">
+
+⚽ ESCOLHER BABINHA
+
+</button>
+
+
+<button
+class="secundario"
+onclick="sair()">
+
+Sair
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- CRIAR -->
+
+<div id="criar" class="tela">
+
+<div class="card">
+
+<h2>➕ Criar Babinha</h2>
+
+
+<label>Nome do Babinha</label>
+
+<input
+id="nomeBabinha"
+placeholder="Ex: Babinha da Galera"
+>
+
+
+<label>Local</label>
+
+<input
+id="local"
+placeholder="Ex: Campo Municipal"
+>
+
+
+<label>Data</label>
+
+<input
+id="data"
+type="date"
+>
+
+
+<label>Horário</label>
+
+<input
+id="hora"
+type="time"
+>
+
+
+<label>Quantidade de jogadores</label>
+
+<input
+id="limite"
+type="number"
+placeholder="Ex: 20"
+>
+
+
+<button onclick="criar()">
+
+Criar Babinha
+
+</button>
+
+
+<button
+class="secundario"
+onclick="mostrar('menu')">
+
+Voltar
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- ESCOLHER BABINHA -->
+
+<div id="escolher" class="tela">
+
+<div class="card">
+
+<h2>⚽ Escolher Babinha</h2>
+
+<div id="lista">
+
+</div>
+
+
+<button
+class="secundario"
+onclick="mostrar('menu')">
+
+Voltar
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- DETALHES -->
+
+<div id="detalhes" class="tela">
+
+<div class="card">
+
+<h2 id="titulo"></h2>
+
+
+<div class="info">
+📍 Local:
+<span id="localDetalhe"></span>
+</div>
+
+
+<div class="info">
+📅 Data:
+<span id="dataDetalhe"></span>
+</div>
+
+
+<div class="info">
+⏰ Horário:
+<span id="horaDetalhe"></span>
+</div>
+
+
+<div class="info">
+👥 Jogadores:
+<span id="quantidadeDetalhe"></span>
+</div>
+
+
+<h3>Jogadores</h3>
+
+<div id="jogadores">
+
+</div>
+
+
+<button
+id="entrarBotao"
+onclick="entrarBabinha()">
+
+⚽ Entrar neste Babinha
+
+</button>
+
+
+<button
+class="secundario"
+onclick="abrirEscolher()">
+
+Voltar
+
+</button>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================
+   DADOS
+========================= */
+
+let usuario = "";
+
+let babinhaSelecionado = null;
+
+let babinhas =
+JSON.parse(localStorage.getItem("BABINHAS")) || [];
+
+
+/* =========================
+   MOSTRAR TELA
+========================= */
+
+function mostrar(id){
+
+    document
+    .querySelectorAll(".tela")
+    .forEach(function(t){
+
+        t.classList.remove("ativa");
+
+    });
+
+    document
+    .getElementById(id)
+    .classList.add("ativa");
+}
+
+
+/* =========================
+   ENTRAR
+========================= */
+
+function entrar(){
+
+    let nome =
+    document
+    .getElementById("nome")
+    .value
+    .trim();
+
+
+    if(nome === ""){
+
+        alert("Digite seu nome.");
+
+        return;
+
+    }
+
+
+    usuario = nome;
+
+
+    document
+    .getElementById("nomeMostrar")
+    .textContent = nome;
+
+
+    /*
+       PRIMEIRO USUÁRIO = DONO
+    */
+
+    let dono =
+    localStorage.getItem("DONO");
+
+
+    if(!dono){
+
+        localStorage.setItem(
+            "DONO",
+            nome
+        );
+
+        dono = nome;
+
+    }
+
+
+    if(usuario === dono){
+
+        document
+        .getElementById("criarBotao")
+        .style.display = "block";
+
+    }else{
+
+        document
+        .getElementById("criarBotao")
+        .style.display = "none";
+
+    }
+
+
+    mostrar("menu");
+
+}
+
+
+/* =========================
+   SAIR
+========================= */
+
+function sair(){
+
+    usuario = "";
+
+    mostrar("inicio");
+
+}
+
+
+/* =========================
+   CRIAR BABINHA
+========================= */
+
+function criar(){
+
+    let nome =
+    document
+    .getElementById("nomeBabinha")
+    .value
+    .trim();
+
+
+    let local =
+    document
+    .getElementById("local")
+    .value
+    .trim();
+
+
+    let data =
+    document
+    .getElementById("data")
+    .value;
+
+
+    let hora =
+    document
+    .getElementById("hora")
+    .value;
+
+
+    let limite =
+    document
+    .getElementById("limite")
+    .value;
+
+
+    if(
+        nome === "" ||
+        local === "" ||
+        data === "" ||
+        hora === "" ||
+        limite === ""
+    ){
+
+        alert("Preencha todas as informações.");
+
+        return;
+
+    }
+
+
+    let novo = {
+
+        id:Date.now(),
+
+        nome:nome,
+
+        local:local,
+
+        data:data,
+
+        hora:hora,
+
+        limite:Number(limite),
+
+        dono:usuario,
+
+        jogadores:[]
+
+    };
+
+
+    babinhas.push(novo);
+
+
+    localStorage.setItem(
+        "BABINHAS",
+        JSON.stringify(babinhas)
+    );
+
+
+    alert("Babinha criado! ⚽");
+
+
+    document
+    .getElementById("nomeBabinha")
+    .value = "";
+
+
+    document
+    .getElementById("local")
+    .value = "";
+
+
+    document
+    .getElementById("data")
+    .value = "";
+
+
+    document
+    .getElementById("hora")
+    .value = "";
+
+
+    document
+    .getElementById("limite")
+    .value = "";
+
+
+    abrirEscolher();
+
+}
+
+
+/* =========================
+   ABRIR ESCOLHER
+========================= */
+
+function abrirEscolher(){
+
+    /*
+       CARREGA NOVAMENTE
+       OS BABINHAS SALVOS
+    */
+
+    babinhas =
+    JSON.parse(
+        localStorage.getItem("BABINHAS")
+    ) || [];
+
+
+    let lista =
+    document.getElementById("lista");
+
+
+    lista.innerHTML = "";
+
+
+    if(babinhas.length === 0){
+
+        lista.innerHTML = `
+
+        <div class="vazio">
+
+        <h3>Nenhum Babinha disponível.</h3>
+
+        <p>
+        O dono ainda não criou nenhum Babinha.
+        </p>
+
+        </div>
+
+        `;
+
+    }else{
+
+
+        babinhas.forEach(function(b){
+
+            let div =
+            document.createElement("div");
+
+
+            div.className = "babinha";
+
+
+            div.innerHTML = `
+
+            <h3>
+            ⚽ ${b.nome}
+            </h3>
+
+            <p>
+            📍 ${b.local}
+            </p>
+
+            <p>
+            📅 ${formatarData(b.data)}
+            </p>
+
+            <p>
+            ⏰ ${b.hora}
+            </p>
+
+            <p>
+            👥 ${b.jogadores.length}/${b.limite}
+            jogadores
+            </p>
+
+            <p>
+            👑 Dono: ${b.dono}
+            </p>
+
+            <button
+            onclick="selecionar(${b.id})">
+
+            ESCOLHER ESTE BABINHA
+
+            </button>
+
+            `;
+
+
+            lista.appendChild(div);
+
+        });
+
+    }
+
+
+    /*
+       AGORA MOSTRA A TELA
+    */
+
+    mostrar("escolher");
+
+}
+
+
+/* =========================
+   SELECIONAR
+========================= */
+
+function selecionar(id){
+
+    babinhas =
+    JSON.parse(
+        localStorage.getItem("BABINHAS")
+    ) || [];
+
+
+    babinhaSelecionado =
+    babinhas.find(function(b){
+
+        return b.id === id;
+
+    });
+
+
+    if(!babinhaSelecionado){
+
+        alert("Babinha não encontrado.");
+
+        return;
+
+    }
+
+
+    document
+    .getElementById("titulo")
+    .textContent =
+    "⚽ " +
+    babinhaSelecionado.nome;
+
+
+    document
+    .getElementById("localDetalhe")
+    .textContent =
+    babinhaSelecionado.local;
+
+
+    document
+    .getElementById("dataDetalhe")
+    .textContent =
+    formatarData(
+        babinhaSelecionado.data
+    );
+
+
+    document
+    .getElementById("horaDetalhe")
+    .textContent =
+    babinhaSelecionado.hora;
+
+
+    document
+    .getElementById("quantidadeDetalhe")
+    .textContent =
+    babinhaSelecionado.jogadores.length +
+    "/" +
+    babinhaSelecionado.limite;
+
+
+    mostrarJogadores();
+
+
+    let botao =
+    document.getElementById(
+        "entrarBotao"
+    );
+
+
+    if(
+        babinhaSelecionado.jogadores
+        .includes(usuario)
+    ){
+
+        botao.textContent =
+        "✅ Você já está neste Babinha";
+
+        botao.disabled = true;
+
+    }else{
+
+        botao.textContent =
+        "⚽ Entrar neste Babinha";
+
+        botao.disabled = false;
+
+    }
+
+
+    mostrar("detalhes");
+
+}
+
+
+/* =========================
+   ENTRAR NO BABINHA
+========================= */
+
+function entrarBabinha(){
+
+    if(!babinhaSelecionado){
+
+        return;
+
+    }
+
+
+    if(
+        babinhaSelecionado.jogadores
+        .includes(usuario)
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        babinhaSelecionado.jogadores.length >=
+        babinhaSelecionado.limite
+    ){
+
+        alert("Babinha lotado.");
+
+        return;
+
+    }
+
+
+    babinhaSelecionado.jogadores.push(
+        usuario
+    );
+
+
+    localStorage.setItem(
+        "BABINHAS",
+        JSON.stringify(babinhas)
+    );
+
+
+    alert(
+        "Você entrou no Babinha! ⚽"
+    );
+
+
+    selecionar(
+        babinhaSelecionado.id
+    );
+
+}
+
+
+/* =========================
+   JOGADORES
+========================= */
+
+function mostrarJogadores(){
+
+    let area =
+    document.getElementById(
+        "jogadores"
+    );
+
+
+    area.innerHTML = "";
+
+
+    if(
+        babinhaSelecionado.jogadores.length === 0
+    ){
+
+        area.innerHTML =
+        "<p>Nenhum jogador ainda.</p>";
+
+        return;
+
+    }
+
+
+    babinhaSelecionado
+    .jogadores
+    .forEach(function(jogador,index){
+
+        let div =
+        document.createElement("div");
+
+
+        div.className =
+        "jogador";
+
+
+        div.textContent =
+        (index + 1) +
+        ". " +
+        jogador;
+
+
+        area.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================
+   DATA
+========================= */
+
+function formatarData(data){
+
+    if(!data){
+
+        return "";
+
+    }
+
+
+    let p =
+    data.split("-");
+
+
+    return (
+        p[2] +
+        "/" +
+        p[1] +
+        "/" +
+        p[0]
+    );
+
+}
+
+</script>
+
+</body>
+</html>
